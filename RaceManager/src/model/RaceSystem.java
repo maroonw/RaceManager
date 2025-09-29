@@ -34,9 +34,12 @@ public class RaceSystem {
         return new ArrayList<>(races.values());
     }
 
-
+// updated this to make sure the races are all adding to the same container
     public void addRace(Race race) {
-        if (race != null) availableRaces.add(race);
+        if (race == null || race.getRaceID() == null) return;
+        availableRaces.add(race);
+
+        races.put(race.getRaceID(), race);
     }
 
 

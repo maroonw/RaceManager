@@ -9,11 +9,11 @@ public class PaymentService {
         this.strategy = s;
     }
 
-    public boolean process(double amount, String payerName, String reference, String details) {
+    public boolean process(double amount, model.User payer, String reference, String details) {
         if (strategy == null) {
             throw new IllegalStateException("No payment strategy selected.");
         }
 
-        return strategy.pay(amount, payerName, reference, details);
+        return strategy.pay(amount, payer, reference, details);
     }
 }
