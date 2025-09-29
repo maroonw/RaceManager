@@ -3,13 +3,16 @@ package model.notification;
 import model.Racer;
 
 public class RacerSubscriber implements IObserver {
-    private final Racer racer;
+    private String racerName;
+    private Racer racer;
 
-    public RacerSubscriber(Racer racer) { this.racer = racer; }
+    public RacerSubscriber(Racer racer) {
+        this.racerName = racer.getName();
+        this.racer = racer;
+    }
 
     @Override
     public void update(String eventType, String data) {
-        // Delegate to Racer domain behavior
-        racer.receiveNotification("[" + eventType + "] " + data);
+        racer.receiveNotification("Event Type: " + eventType + "\nData: " + data + "\n");
     }
 }
