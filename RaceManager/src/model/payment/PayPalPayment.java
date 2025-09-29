@@ -4,10 +4,9 @@ import model.User;
 
 public class PayPalPayment implements PaymentStrategy {
     @Override
-    public boolean pay(double amount, User payer, String reference, String details) {
-        System.out.printf("Paid $%.2f for %s via PayPal (%s)%n",
-                amount, reference, details);
+    public boolean pay(double amount, String payerName, String reference, String details) {
+        System.out.printf("Paid $%.2f for %s via PayPal (%s)%n", amount, reference, details);
+
         return true;
     }
 }
-
