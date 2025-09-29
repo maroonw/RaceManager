@@ -6,10 +6,20 @@ import java.util.List;
 public class RaceNotifications implements ISubject {
     private final List<IObserver> observers = new ArrayList<>();
 
-    @Override public void attach(IObserver o) { observers.add(o); }
-    @Override public void detach(IObserver o) { observers.remove(o); }
-    @Override public void notify(String eventType, String data) {
-        for (IObserver o : observers) o.update(eventType, data);
+    @Override
+    public void attach(IObserver o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void detach(IObserver o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void notify(String eventType, String data) {
+        for (IObserver o : observers)
+            o.update(eventType, data);
     }
 
     public void publishRaceEvent(String eventType, String data) {
