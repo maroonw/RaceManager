@@ -5,4 +5,3 @@ public interface ISubject {
     void detach(IObserver o);
     void notify(String eventType, String data);
 }
-
