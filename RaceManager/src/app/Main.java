@@ -45,7 +45,7 @@ public class Main {
 
 
         // fake login demo
-        fakeLoginDemo();
+        // fakeLoginDemo();
         // Show login form first
         userView.displayLoginForm();
 

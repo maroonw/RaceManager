@@ -150,8 +150,10 @@ public class MainMenuView {
                     break;
 
                 case 6:
-                    running = false;
+                    //running = false;
                     System.out.println("Exiting. Goodbye!");
+                    // goes back to login screen, to go back to just exiting un comment above, comment below
+                    userView.logoutToLogin();
                     break;
                 case 7:
                     demoBrowseRaces();

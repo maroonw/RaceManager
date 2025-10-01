@@ -8,12 +8,45 @@ import model.Racer;
 
 public class UserController {
     private final RaceSystem raceSystem;
+    private User currentUser;
 
     public UserController(RaceSystem raceSystem){
         this.raceSystem=raceSystem;
     }
-    public void handleLogin(String email, String password) { }
-    public void handleRegister(User user) { }
+
+    public void handleLogin(String email, String password) {
+        User u = raceSystem.authenticate(email, password);
+        if (u != null) {
+            currentUser = u;
+            System.out.println("Welcome, " + u.getName());
+        } else {
+            System.out.println("Wrong email or password");
+        }
+    }
+    public void handleRegister(User user) {
+        if (user == null || user.getEmail() == null || user.getEmail().isBlank()) {
+            System.out.println("Misisng Email");
+            return;
+        }
+        if (raceSystem.findUserByEmail(user.getEmail()) != null) {
+            System.out.println("User already exists");
+            return;
+        }
+        raceSystem.registerUser(user);
+        System.out.println("User created");
+    }
+
+    public boolean userExists(String email) {
+        return raceSystem.findUserByEmail(email) != null;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void logout() {
+        currentUser = null;
+    }
 
 
 

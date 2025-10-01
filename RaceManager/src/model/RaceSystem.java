@@ -5,8 +5,8 @@ import java.util.*;
 public class RaceSystem {
     private final Map<String, User> users = new HashMap<>(); // key = email
     //private List<User> users = new ArrayList<>();
-    private List<Race> availableRaces = new ArrayList<>();
-    private List<RaceResult> raceHistory = new ArrayList<>();
+    private final List<Race> availableRaces = new ArrayList<>();
+    private final List<RaceResult> raceHistory = new ArrayList<>();
 
     private static int nextRaceId = 0;
     private static final Map<String, Race> races = new HashMap<>(); //key = race Id
@@ -18,11 +18,22 @@ public class RaceSystem {
         if (user == null || user.getEmail() == null) {
             throw new IllegalArgumentException("User or user email cannot be null");
         }
+        String key = user.getEmail().toLowerCase();
         users.put(user.getEmail(), user);
     }
 
     public User findUserByEmail(String email) {
-        return users.get(email);
+        if (email == null) return null;
+        return users.get(email.toLowerCase());
+    }
+
+    public User authenticate(String email, String password) {
+        if (email == null || password == null) return null;
+        User u = findUserByEmail(email);
+        if (u != null && u.getPassword() != null && u.getPassword().equals(password)) {
+            return u;
+        }
+        return null;
     }
 
     public List<User> getAllUsers() {
