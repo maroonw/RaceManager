@@ -4,6 +4,7 @@ import controller.RaceController;
 import model.Race;
 import model.RaceSystem;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 
@@ -63,13 +64,53 @@ public class RaceView {
             return;
         }
 
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+        System.out.printf("%-6s | %-6s | %-14s | %-5s | %-16s | %-9s | %-6s | %-3s | %-14s%n",
+                "RaceID", "Date", "Type", "Miles", "Route", "Official?", "Limit", "Cat", "Last Reg. Date");
+        System.out.println("----------------------------------------------------------------------------------------------------------");
+
         for (Race r : races) {
-            System.out.println("- " + r);
+            String dateStr = r.getRaceDate() != null ? sdf.format(r.getRaceDate()) : "";
+            String lastRegStr = r.getLastRegistrationDate() != null ? sdf.format(r.getLastRegistrationDate()) : "";
+            System.out.printf("%-6s | %-6s | %-14s | %-5.1f | %-16s | %-9s | %-6d | %-3d | %-14s%n",
+                    r.getRaceID(),
+                    dateStr,
+                    r.getType(),
+                    r.getMiles(),
+                    r.getRoute(),
+                    r.isOfficialRace(),
+                    r.getParticipantLimit(),
+                    r.getCatRequired(),
+                    lastRegStr);
         }
+    }
+
+    public void displayRace(Race r) {
+        if (r == null) {
+            System.out.println("Race is null");
+            return;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+        System.out.printf("%-6s | %-6s | %-14s | %-5s | %-16s | %-9s | %-6s | %-3s | %-14s%n",
+                "RaceID", "Date", "Type", "Miles", "Route", "Official?", "Limit", "Cat", "Last Reg. Date");
+        System.out.println("----------------------------------------------------------------------------------------------------------");
+
+        String dateStr = r.getRaceDate() != null ? sdf.format(r.getRaceDate()) : "";
+        String lastRegStr = r.getLastRegistrationDate() != null ? sdf.format(r.getLastRegistrationDate()) : "";
+        System.out.printf("%-6s | %-6s | %-14s | %-5.1f | %-16s | %-9s | %-6d | %-3d | %-14s%n",
+                r.getRaceID(),
+                dateStr,
+                r.getType(),
+                r.getMiles(),
+                r.getRoute(),
+                r.isOfficialRace(),
+                r.getParticipantLimit(),
+                r.getCatRequired(),
+                lastRegStr);
     }
 
 
     //**************************
 
 }
-
