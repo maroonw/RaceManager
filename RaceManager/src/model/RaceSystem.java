@@ -2,6 +2,22 @@ package model;
 
 import java.util.*;
 
+/**
+* Central management system for the racing app.
+*
+* Responsible for:
+*    User registration and authentication
+*    Race creation with automatic ID generation
+*    Race catalog management
+*    Racer category progression and upgrades
+*    User and race data retrieval
+*
+* @see User
+* @see Racer
+* @see Race
+* @see RaceResult
+*
+*/
 public class RaceSystem {
     private final Map<String, User> users = new HashMap<>(); // key = email
     //private List<User> users = new ArrayList<>();
@@ -97,3 +113,4 @@ public class RaceSystem {
 
 
 }
+
