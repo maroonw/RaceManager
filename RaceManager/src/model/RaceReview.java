@@ -1,5 +1,17 @@
 package model;
 
+/**
+* Feedback submitted by a racer for a completed race.
+*
+* Valid review components:
+*   Non-empty comment describing the race experience
+*   Rating between 1 and 5
+*   Reference to {@link Racer} who submitted the review
+*   
+* @see Racer
+* @see Race
+*
+*/
 
 public class RaceReview {
     private String comment;
@@ -24,3 +36,4 @@ public class RaceReview {
                 && reviewer != null;
     }
 }
+
