@@ -32,6 +32,27 @@ public class UserController {
             System.out.println("User already exists");
             return;
         }
+
+        //already a racer
+        if (user instanceof Racer) {
+            raceSystem.registerUser(user);
+            System.out.println("Account created");
+            return;
+        }
+
+        // user says racer, but is actually a user
+        // convert user to racer
+        if ("RACER".equalsIgnoreCase(user.getUserType())) {
+            model.Racer r = new model.Racer();
+            copyUserFields(user, r);
+            r.setCatLevel(5);
+            raceSystem.registerUser(r);
+            System.out.println("Account created for " + r.getEmail());
+            return;
+        }
+
+
+        // correct type registration
         raceSystem.registerUser(user);
         System.out.println("User created");
     }
@@ -48,7 +69,14 @@ public class UserController {
         currentUser = null;
     }
 
-
+    private static void copyUserFields(User src, User dst) {
+        dst.setName(src.getName());
+        dst.setEmail(src.getEmail());
+        dst.setPassword(src.getPassword());
+        dst.setUserType(src.getUserType());
+    }
 
 }
+
+
 

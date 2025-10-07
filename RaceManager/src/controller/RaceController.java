@@ -112,11 +112,17 @@ public class RaceController {
     }
     //******************
 
-
     // gettter to return all races
     public List<model.Race> getAllRaces() {
             return raceSystem.getAllRaces();
     }
 
+    // eligibility based on cat level of race and racer
+    public boolean isEligble(model.Racer racer, model.Race race) {
+        if (racer == null || race == null) {
+            return false;
+        }
+        return racer.getCatLevel() >= race.getCatRequired();
+    }
 }
 

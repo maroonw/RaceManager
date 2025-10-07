@@ -125,13 +125,25 @@ public class MainMenuView {
                     break;
                 case 1:
                     raceView.displayRaceList();
-                    // Where to get list of races from?
-                    //raceView.displayRaceList();
+                    String raceId = raceView.enterRaceId();
+                    if (raceId == null) {
+                        break;
+                    }
+                    var current = userView.getController().getCurrentUser();
+                    if (!(current instanceof model.Racer racer)) {
+                        System.out.println("Please log in as a Racer to sign up.");
+                        break;
+                    }
                     break;
                 case 2:
                     racerView.promptCreateRacer();
-                    //userView.signUpForRace();
-                    //var racer = racerView.selectRaceForSignup();
+                    System.out.print("Would you like to sign up for a race? (y/n)");
+                    String response = scanner.nextLine();
+                    if (response.equalsIgnoreCase("y")) {
+                        userView.signUpForRace();
+                    } else {
+                        break;
+                    }
                     break;
                 case 3:
                     //System.out.println("Enter raceID: ");

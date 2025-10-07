@@ -86,6 +86,14 @@ public class RaceView {
         }
     }
 
+    public String enterRaceId() {
+        System.out.print("Enter race ID: ");
+        Scanner sca = new Scanner(System.in);
+        String id = sca.nextLine().trim();
+        return id.isEmpty() ? null : id;
+
+    }
+
     // detail view of race
     public void displayRace(Race r) {
         if (r == null) {

@@ -70,6 +70,12 @@ public class Racer extends User {
 
 
     public int getCatLevel() {
+        //testing high level
+        //int catLevel = 5;
+
+        //testing low level
+        // int catLevel = 0;
+
         return catLevel;
     }
 

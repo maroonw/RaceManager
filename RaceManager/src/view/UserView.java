@@ -2,6 +2,7 @@ package view;
 
 import controller.UserController;
 import model.User;
+import model.Racer;
 
 import java.util.Scanner;
 
@@ -21,28 +22,30 @@ public class UserView {
             String email = scanner.nextLine();
 
             if (!controller.userExists(email)) {
-                System.out.println("Email not found");
-                System.out.println("Let's get you registered");
+                System.out.println("No account found. Let's create one.");
 
-                System.out.println("Please enter your name");
-                String name = scanner.nextLine();
+                System.out.print("Name: ");
+                String name = scanner.nextLine().trim();
+
+                System.out.print("Choose a password: ");
+                String pw1 = scanner.nextLine().trim();
+
+                // Create a Racer
+                model.Racer u = new model.Racer();
+                u.setName(name);
+                u.setEmail(email);
+                u.setPassword(pw1);
+                u.setUserType("RACER");
+                u.setCatLevel(5);
+                u.setLicense(null);
+
+                controller.handleRegister(u);
+                System.out.println("(You can now log in.)");
 
                 System.out.println("Please enter your password");
                 String password = scanner.nextLine();
-
-                User u = new User();
-                u.setEmail(email);
-                u.setName(name);
-                u.setPassword(password);
-                u.setUserType("Racer");
-
-                controller.handleRegister(u);
-                System.out.println("You are now registered");
+                controller.handleLogin(email, password);
             }
-
-            System.out.println("Please enter your password");
-            String password = scanner.nextLine();
-            controller.handleLogin(email, password);
         }
 
     }
@@ -60,5 +63,12 @@ public class UserView {
             e.printStackTrace();
         }
         displayLoginForm();
+    }
+
+    public void signUpForRace() {
+    }
+
+    public controller.UserController getController() {
+        return controller;
     }
 }

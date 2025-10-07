@@ -20,6 +20,7 @@ import java.util.*;
 */
 public class RaceSystem {
     private final Map<String, User> users = new HashMap<>(); // key = email
+    private final Map<String, Integer> registrations = new HashMap<>();
     //private List<User> users = new ArrayList<>();
     private final List<Race> availableRaces = new ArrayList<>();
     private final List<RaceResult> raceHistory = new ArrayList<>();
@@ -70,6 +71,7 @@ public class RaceSystem {
     }
 
 
+
     public void upgradeCategory(Racer racer) {
         if (racer == null) throw new IllegalArgumentException("Racer cannot be null");
 
@@ -85,6 +87,38 @@ public class RaceSystem {
 
     // getters/setters ...
 
+    //get race by id
+    public Race getRaceByID(String raceId) {
+        try {
+
+            if (raceId == null) return null;
+            for (Race r : getAllRaces())
+                if (r != null && raceId.equals(r.getRaceID())) {
+                    return r;
+                }
+            return null;
+        } catch (Exception e) {
+            System.out.println("An error occured while getting race by ID");
+        }
+        return null;
+    }
+
+    public int getRegistrations(String raceId) {
+        return registrations.get(raceId);
+    }
+
+    public boolean hasSpots(Race race) {
+        if (race == null) return false;
+        int limit = race.getParticipantLimit();
+        return limit <= 0 || getRegistrations(race.getRaceID()) < limit;
+    }
+
+    public boolean reserveSpots(Race race) {
+        if(!hasSpots(race)) return false;
+        String id = race.getRaceID();
+        registrations.put(id, getRegistrations(id) + 1);
+        return true;
+    }
 
     public Race createRace(Date date, String type, double miles, String route, boolean official, int limit, Date lastRegDate, int catRequired) {
         String id = "R" + (++nextRaceId);

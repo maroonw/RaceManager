@@ -51,6 +51,11 @@ public class Race {
     }
 
     public int getCatRequired() {
+        //test high level
+        //catRequired = 5;
+
+        //test low level
+        //catRequired = 0;
         return catRequired;
     }
     public void setRaceDate(Date raceDate) { this.raceDate = raceDate; }
