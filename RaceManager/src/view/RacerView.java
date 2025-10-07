@@ -9,6 +9,24 @@ import model.License;
 
 import java.util.Scanner;
 
+/**
+*
+* Handles the presentation layer for all racer-related user interface interactions.
+*
+* Responsible for:
+*   Displaying interactive menus and prompts
+*   Collecting and validating user input
+*   Showing racer profile and race lists
+*   Handling license purchase workflow and confirmation
+*   Managing raace review submission interface
+*   Displaying success messages, errors and notifications
+*
+* @see RacerController
+* @see Racer
+* @see Race
+* @see License
+*
+*/
 
 public class RacerView {
 
