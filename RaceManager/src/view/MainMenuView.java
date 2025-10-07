@@ -48,7 +48,7 @@ public class MainMenuView {
         // show two seeded races
         raceView.displayRaceList(Arrays.asList(seed.crit, seed.tt));
 
-        // pretend user picks credit
+        // Handle Payment
         String method = demoPaymentView.selectMethod();
         String details;
         if ("credit".equalsIgnoreCase(method)) {
@@ -107,7 +107,7 @@ public class MainMenuView {
             System.out.println("3. View Results");
             System.out.println("4. Submit Review");
             System.out.println("5. View Reviews");
-            System.out.println("6. Exit");
+            System.out.println("6. Logout");
             System.out.println("7. Strategy Payment demo");
             System.out.println("8. Observer Notification demo");
             System.out.print("Enter your choice: ");
@@ -148,10 +148,9 @@ public class MainMenuView {
                     // Reviews need to be obtained
                     //reviewView.displayReviews(getReviews);
                     break;
-
                 case 6:
                     //running = false;
-                    System.out.println("Exiting. Goodbye!");
+                    System.out.println("Logging Out... Goodbye!");
                     // goes back to login screen, to go back to just exiting un comment above, comment below
                     userView.logoutToLogin();
                     break;
