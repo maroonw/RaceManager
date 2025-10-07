@@ -1,5 +1,25 @@
 package controller;
 
+/**
+* Handles all racer-related oprations
+*
+* Responsible for:
+*   Racer registration and profile management
+*   Race browsing and sign-up coordination with license validation
+*   License purchase processing
+*   Race review submission and validation
+*   Category upgrade management
+* 
+* Uses the following notification systems:
+*   {@link NotificationCenter} - for general notifications
+*   (@link RaceNotifications) - for race-specific event notifications
+*
+* @see Racer
+* @see RaceSystem
+* @see NotificationCenter
+* @see RaceNotifications
+*
+*/
 
 import model.Race;
 import model.Racer;
