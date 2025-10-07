@@ -1,5 +1,14 @@
 package model;
 
+/** 
+* Represents a racer in the race management system
+* Extends {@link User}
+* Racers cab browse available races, sign up, purchase licenses and review races they have participated in.
+*
+* @see User
+* @see License
+* @see Race
+*/
 
 public class Racer extends User {
     private String creditCardInfo;
@@ -79,6 +88,7 @@ public class Racer extends User {
         this.license = license;
     }
 }
+
 
 
 
