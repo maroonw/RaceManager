@@ -10,7 +10,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+import java.util.List;
+import model.Race;
+import model.RaceSystem;
 
 
 
@@ -111,6 +113,10 @@ public class RaceController {
     //******************
 
 
+    // gettter to return all races
+    public List<model.Race> getAllRaces() {
+            return raceSystem.getAllRaces();
+    }
 
 }
 

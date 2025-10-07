@@ -7,6 +7,7 @@ import model.RaceSystem;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
+import java.lang.*;
 
 
 public class RaceView {
@@ -20,7 +21,7 @@ public class RaceView {
     public void displayRaceDetails(Race race) { }
     public void promptSignUp(Race race) { /* ask for method/details, call controller */ }
 
-    //**********************
+
     public void promptCreateRace() {
         Scanner sc = new Scanner(System.in);
 
@@ -56,7 +57,7 @@ public class RaceView {
      * Display all available races from RaceSystem
      */
     public void displayRaceList() {
-        List<Race> races = raceSystem.getAllRaces();
+        List<model.Race> races = controller.getAllRaces();
 
         System.out.println("\n=== Available Races ===");
         if (races.isEmpty()) {
@@ -85,6 +86,7 @@ public class RaceView {
         }
     }
 
+    // detail view of race
     public void displayRace(Race r) {
         if (r == null) {
             System.out.println("Race is null");
@@ -110,7 +112,5 @@ public class RaceView {
                 lastRegStr);
     }
 
-
-    //**************************
 
 }
