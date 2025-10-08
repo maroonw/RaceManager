@@ -28,7 +28,8 @@ import model.RaceReview;
 import model.RaceSystem;
 import model.notification.NotificationCenter;
 import model.notification.RaceNotifications;
-
+import model.payment.*;
+import view.PaymentView;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class RacerController {
     private final RaceSystem raceSystem;
     private final NotificationCenter notificationCenter = new NotificationCenter();
     private final RaceNotifications raceNotifications = new RaceNotifications();
+
 
     public RacerController(RaceSystem raceSystem){
         this.raceSystem=raceSystem;
@@ -66,8 +68,8 @@ public class RacerController {
         }
     }
 
-
-    public License handlePurchaseLicense(Racer racer) {
+//old version
+    /**public License handlePurchaseLicense(Racer racer) {
         if (racer != null) {
             License license = racer.purchaseLicense();
             if (license != null) {
@@ -77,8 +79,37 @@ public class RacerController {
             return license;
         }
         return null;
-    }
+    }*/
 
+    //new version
+    // --- Payment and License Handling (Strategy Pattern) ---
+    public License handlePurchaseLicense(Racer racer, String paymentMethod) {
+        if (racer == null) return null;
+
+        PaymentService service = new PaymentService();
+
+        switch (paymentMethod.toLowerCase()) {
+            case "credit" -> service.setStrategy(new CreditCardPayment());
+            case "paypal" -> service.setStrategy(new PayPalPayment());
+            case "stripe" -> service.setStrategy(new StripePayment());
+            default -> {
+                System.out.println("Unknown payment method, using Credit Card by default.");
+                service.setStrategy(new CreditCardPayment());
+            }
+        }
+
+        boolean success = service.process(25.00, racer, "License Purchase", "Annual license");
+
+        if (success) {
+            License license = racer.purchaseLicense();
+            notificationCenter.publish("LICENSE_PURCHASED",
+                    "Racer " + racer.getName() + " purchased a license using " + paymentMethod);
+            return license;
+        } else {
+            System.out.println("Payment failed for racer: " + racer.getName());
+            return null;
+        }
+    }
 
     public void handleReviewRace(Racer racer, Race race, String comment, int rating) {
         if (racer != null && race != null) {
