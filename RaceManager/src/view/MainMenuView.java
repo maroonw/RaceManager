@@ -3,6 +3,7 @@ package view;
 import app.DataSeeder;
 import controller.RaceController;
 import controller.ResultController;
+import model.Race;
 import view.PaymentView;
 import model.RaceResult;
 import model.Racer;
@@ -129,12 +130,65 @@ public class MainMenuView {
                     if (raceId == null) {
                         break;
                     }
+
+                    // must be logged in to proceed
                     var current = userView.getController().getCurrentUser();
                     if (!(current instanceof model.Racer racer)) {
                         System.out.println("Please log in as a Racer to sign up.");
                         break;
                     }
+
+                    // make sure set up demoPaymentView and demoRaceController
+                    if (demoPaymentView == null || demoRaceController == null) {
+                        System.out.println("Payment or Race Controller not set up");
+                        break;
+                    }
+
+                    // show official vs unofficial (let th user know why they are putting in payment info)
+                    Race selected = demoRaceController.getRaceById(raceId);
+                    if (selected == null) {
+                        System.out.println("Race not found");
+                        break;
+                    }
+
+                    boolean isOfficial = selected.isOfficialRace();
+
+                    System.out.println("Selected Race: " + selected.getRaceID());
+                    System.out.println("Race is official: " + isOfficial);
+
+                    if (isOfficial) {
+                        System.out.println("A license is required.");
+                        System.out.println("You have needed license: " + (racer.hasLicense() ? "Yes" : "No"));
+                    } else {
+                        System.out.println("This is an unoffical race.");
+                    }
+
+                    // payments process (loop)
+                    boolean paid = false;
+                    while (!paid) {
+                        String method = demoPaymentView.selectMethod();
+                        String details;
+                        if ("credit".equalsIgnoreCase(method)) {
+                            details = demoPaymentView.enterCardNumber();
+                        } else if ("paypal".equalsIgnoreCase(method)) {
+                            details = demoPaymentView.enterPayPalEmail();
+                        } else {
+                            details = demoPaymentView.enterStripeToken();
+                        }
+
+                        paid = demoRaceController.handleSignUpFlow(racer, raceId, method, details);
+                        if (!paid) {
+                            System.out.println("Payment declined or race unavailable");
+                            System.out.print("Try another payment method? (y to retry, else cancel");
+                            Scanner scr = new Scanner(System.in);
+                            String tryAgain = scr.nextLine().trim();
+                            if (tryAgain.equalsIgnoreCase("y")) {
+                                break;
+                            }
+                        }
+                    }
                     break;
+
                 case 2:
                     racerView.promptCreateRacer();
                     System.out.print("Would you like to sign up for a race? (y/n)");

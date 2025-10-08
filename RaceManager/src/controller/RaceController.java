@@ -1,18 +1,14 @@
 package controller;
 
-import model.Race;
-import model.RaceSystem;
-import model.Racer;
-import model.payment.*;
+
+import model.*;
 import model.notification.*;
+import model.payment.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import java.util.List;
-import model.Race;
-import model.RaceSystem;
+import java.util.*;
 
 
 
@@ -42,6 +38,7 @@ public class RaceController {
         raceNotifications.publishRaceEvent("SIGNUP_CONFIRMED", "Racer " + userId + " -> Race " + raceId);
     }
 
+    // handling payments for notification purposes
     public void handleSelectPaymentAndPay(String method, String details, int raceId, int userId) {
         // choose strategy
         switch (method.toLowerCase()) {
@@ -60,6 +57,29 @@ public class RaceController {
         }
     }
 
+    //boolean to tell if paymetn is successful
+    public boolean trySelectPaymentAndPay(String method, String details, int raceId, int userId) {
+        if (method == null) return false;
+
+        switch (method.toLowerCase()) {
+            case "credit" -> paymentService.setStrategy(new CreditCardPayment());
+            case "paypal" -> paymentService.setStrategy(new PayPalPayment());
+            case "stripe" -> paymentService.setStrategy(new StripePayment());
+            default -> {
+                throw new IllegalArgumentException("Unknown payment method: " + method);
+            }
+        }
+
+        String payer = "User#" + userId;
+        boolean ok = paymentService.process(45.00, new Racer(), "Race#" + raceId, details);
+
+        if (ok) {
+            raceNotifications.publishRaceEvent("PAYMENT_SUCCESS", payer + " paid for Race " + raceId);
+        } else {
+            raceNotifications.publishRaceEvent("PAYMENT_DECLINED", payer + " failed payment for Race " + raceId);
+        }
+        return ok;
+    }
     // exposure for wiring subscribers (e.g., from View)
     public NotificationCenter getNotificationCenter() { return notificationCenter; }
     public RaceNotifications getRaceNotifications() { return raceNotifications; }
@@ -123,6 +143,71 @@ public class RaceController {
             return false;
         }
         return racer.getCatLevel() >= race.getCatRequired();
+    }
+
+    // total fee, race fee + license fee
+    public double calculateTotal(Racer racer, Race race) {
+        double raceFee = 50.00;
+        double licenseFee = (race.isOfficialRace() && !racer.hasLicense()) ? 100.0 : 0.0;
+        return raceFee + licenseFee;
+    }
+
+    // sign up flow, we can change this around to match activity diagram if we need to change something
+
+    public boolean handleSignUpFlow(Racer racer, String raceId, String method, String details) {
+        Race race = raceSystem.getRaceByID(raceId);
+        if (race == null) {
+            System.out.println("ERROR: Race not found.");
+            return false;
+        }
+
+        // check eligibility and spots available (notification pattern usage)
+        if (!isEligble(racer, race) || !raceSystem.hasSpots(race)) {
+            raceNotifications.publishRaceEvent("SELECT_DIFFERENT_RACE",
+                    "Not eligible or no spots available for " + raceId);
+            return false;
+        }
+
+        // official vs unofficial
+        boolean licenseNeeded = race.isOfficialRace() && !racer.hasLicense();
+        double total = calculateTotal(racer, race);
+
+        //payment using PaymentService (builder patter usage)
+        boolean pay;
+        try {
+            pay = trySelectPaymentAndPay(method, details, Integer.parseInt(raceId), 0);
+        } catch (Throwable t) {
+            pay = false;
+        }
+
+        if (!pay) {
+            raceNotifications.publishRaceEvent("PAYMENT_DECLINED", "Payment declined for: " + raceId);
+            return false;
+        }
+
+        // issue license if just paid for, if not this is skipped
+        if (licenseNeeded) {
+            License license = new License();
+            license.setLicenseId("LIC" + System.currentTimeMillis());
+            license.setExpiration(new Date(System.currentTimeMillis() + 365L*24*60*60*1000));
+            racer.setLicense(license);
+        }
+
+        // finalize and notification split on activity diagram, both must happen
+        if (!raceSystem.hasSpots(race)) {
+            raceNotifications.publishRaceEvent("SELECT_DIFFERENT_RACE",
+            "Race " + raceId + " filled up while you were typing.");
+        return false;
+        }
+
+        raceNotifications.publishRaceEvent("SIGNUP_CONFIRMED", "Signup confirmed for: " + raceId);
+        raceNotifications.publishRaceEvent("RECEIPT_CONFIRMED", "Receipt confirmed for: " + raceId);
+        return true;
+    }
+
+    //show official vs unofficial without breaking into the model classes directly from view
+    public model.Race getRaceById(String id) {
+        return raceSystem.getRaceByID(id);
     }
 }
 

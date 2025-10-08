@@ -13,6 +13,9 @@ import java.lang.*;
 public class RaceView {
     private final RaceController controller;
     private final RaceSystem raceSystem;
+    private String safe(String s) {
+        return s == null ? "" : s;
+    }
 
     public RaceView(RaceController controller, RaceSystem raceSystem) { this.controller = controller;
     this.raceSystem=raceSystem;}

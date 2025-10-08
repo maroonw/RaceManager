@@ -104,7 +104,7 @@ public class RaceSystem {
     }
 
     public int getRegistrations(String raceId) {
-        return registrations.get(raceId);
+        return raceId == null ? 0 : registrations.getOrDefault(raceId, 0);
     }
 
     public boolean hasSpots(Race race) {
@@ -139,8 +139,6 @@ public class RaceSystem {
 
         return race;
     }
-
-
 
 
 
