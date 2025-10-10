@@ -117,7 +117,7 @@ public class RaceSystem {
         return limit <= 0 || getRegistrations(race.getRaceID()) < limit;
     }
 
-    public boolean reserveSpots(Race race) {
+    public boolean reserveSpot(Race race) {
         if(!hasSpots(race)) return false;
         String id = race.getRaceID();
         registrations.put(id, getRegistrations(id) + 1);
@@ -148,8 +148,6 @@ public class RaceSystem {
     }
 
 
-    public boolean reserveSpot(Race race) {
-        return true;
-    }
+
 }
 
