@@ -41,13 +41,12 @@ public class UserView {
 
                 controller.handleRegister(u);
                 System.out.println("(You can now log in.)");
+            }
 
                 System.out.println("Please enter your password");
                 String password = scanner.nextLine();
                 controller.handleLogin(email, password);
-            }
         }
-
     }
     public void displayProfile(User user) {
         System.out.println("-----Profile-----");
@@ -72,3 +71,4 @@ public class UserView {
         return controller;
     }
 }
+
