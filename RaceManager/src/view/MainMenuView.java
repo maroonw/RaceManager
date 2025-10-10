@@ -163,6 +163,20 @@ public class MainMenuView {
                         System.out.println("This is an unoffical race.");
                     }
 
+                    // new computation for total due
+                    double total = demoRaceController.getTotalDue(racer, selected);
+
+                    // finalizes if no payment is due
+                    if (total <= 0.0) {
+                        boolean nd = demoRaceController.finalizeRegistration(racer, raceId);
+                        if (!nd) {
+                            System.out.println("Registration was not finalized");
+                        } else {
+                            System.out.println("Registration complete");
+                        }
+                        break;
+                    }
+
                     // payments process (loop)
                     boolean paid = false;
                     while (!paid) {

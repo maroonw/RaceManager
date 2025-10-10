@@ -68,6 +68,10 @@ public class RaceSystem {
         availableRaces.add(race);
 
         races.put(race.getRaceID(), race);
+
+        // you have to have this so it shows as 0 instead of null
+        registrations.putIfAbsent(race.getRaceID(), 0);
+
     }
 
 
@@ -88,7 +92,7 @@ public class RaceSystem {
     // getters/setters ...
 
     //get race by id
-    public Race getRaceByID(String raceId) {
+    public Race getRaceById(String raceId) {
         try {
 
             if (raceId == null) return null;
@@ -137,12 +141,15 @@ public class RaceSystem {
         // Observer hook (simplified for now)
         System.out.println("Notification: Race created -> " + id);
 
+        // you have to have this so it shows as 0 instead of null
+        registrations.putIfAbsent(race.getRaceID(), 0);
+
         return race;
     }
 
 
-
-
-
+    public boolean reserveSpot(Race race) {
+        return true;
+    }
 }
 
